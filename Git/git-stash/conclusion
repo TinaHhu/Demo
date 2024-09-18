@@ -1,0 +1,24 @@
+git stash总结
+
+
+针对问题：
+    本地已有开发分支，现在需要再切一个新的本地分支进行开发。
+
+
+git stash功能：
+    贮藏（stash）会处理工作目录的脏的状态——即跟踪文件的修改与暂存的改动——然后将未完成的修改保存到一个栈上， 而你可以在任何时候重新应用这些改动（甚至在不同的分支上）。
+
+
+git stash命令：
+    'git stash'：贮存当前分支的修改，保存在栈中。
+    'git stash list'：查看所有的贮存。
+    'git stash apply stash@{0}'：应用名为'stash@{0}'的贮存；若'git stash apply'则表示应用最新的一次贮存。
+    'git stash drop stash@{0}'：删除名为'stash@{0}'的贮存；若'git stash drop'则表示删除最新的一次贮存。
+    'git stash pop stash@{0}'：应用并删除名为'stash@{0}'的贮存，若'git stash pop'则表示应用并删除最新的一次贮存。
+
+
+git stash操作：
+    step1：'git add .'跟踪当前本地分支上的修改。
+    step2：'git stash'贮存。
+    step3：'git stash list'查看栈。
+    step4：'git stash pop'应用并删除最新的贮存。 
