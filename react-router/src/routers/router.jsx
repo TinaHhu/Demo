@@ -1,5 +1,5 @@
 import React from "react";
-import './../index.css';
+import { Outlet } from "react-router-dom";
 export default function Root() {
     return (
       <>
@@ -39,7 +39,10 @@ export default function Root() {
             </ul>
           </nav>
         </div>
-        <div id="detail"></div>
+        {/** 告诉根组件，这里是子组件的地方 */}
+        <div id="detail">
+            <Outlet /> 
+        </div>
       </>
     );
   }

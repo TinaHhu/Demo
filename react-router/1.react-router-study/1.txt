@@ -1,1 +1,48 @@
-https://reactrouter.com/en/main/start/tutorial
+教程地址：https://reactrouter.com/en/main/start/tutorial
+
+'npx create-react-app name' 创建一个react项目，'npm install react-router-dom@6',安装 react-router-dom 。
+
+react-router 和 react-router-dom 的区别
+    1.react-router-dom 是在 react-router 的基础上开发的，react-router-dom 中的很多组件都是直接从 react-router 中获取的，因此安装了 react-router-dom 后，就不用安装 react-router 了。
+    2.react-router-dom 在 react-router 的基础上，增加了BrowserRouter、HashRouter、Link、NavLink组件，用于路由跳转。其中BrowserRouter、HashRouter用于替代react-router中的Router组件；
+      Link、NavLink的作用类似于a标签；
+
+
+
+
+
+
+const router = createBrowserRouter([
+  {
+    path: '/', // 根路由
+    element: <Root />, // 正常的根组件
+    errorElement: <ErrorPage />, // 处理未找到的根组件，即是 404 页面 
+  },
+  {
+    path: "contacts", // 联系路由
+    element: <Contact />,
+    errorElement: <ErrorPage />,
+  }
+])
+
+    运行本项目后，发现 Contact 页面和 Root 页面没有同时出现。想要
+两个页面页面同时出现，就要将联系路由变为跟路由的子路由，如下所示。
+
+const router = createBrowserRouter([
+  {
+    path: '/', // 根路由
+    element: <Root />, // 正常的根组件
+    errorElement: <ErrorPage />, // 处理未找到的根组件，即是 404 页面 
+    children: [
+      {
+        path: "contacts", // 子路由
+        element: <Contact />,
+        errorElement: <ErrorPage />
+      }
+    ]
+  },
+])
+
+
+    运行发现，根路由右侧并没有出现 Contact 页面。 原因是因为跟路由组件不知道在哪里呈现出子路由组件，所以就要用到 <Outlet> 组件，
+在根组件Root中，加入 <Outlet /> 组件。
