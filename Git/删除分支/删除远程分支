@@ -1,0 +1,11 @@
+删除远程分支
+
+// 删除远程分支
+'git push <remote> --delete <branch>'
+
+// 也可以使用
+'git push origin :--delete XXX'
+
+// 为了避免误会已删除的远程分支，可以使用一下命令行来去除掉已被删除的远程分支
+'git fetch -p'
+
