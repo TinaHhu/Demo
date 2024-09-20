@@ -1,0 +1,18 @@
+只进行了 'git add .' 和 'git commit' 操作
+
+    ‘git log’ 查看提交记录，或者用 ‘git log --oneline’ 查看提交记录。
+
+    ‘git rebase -i （start, end】’
+        使用该语句意为要合并’start‘之后的（不包含start）， ‘end’之前的（包括end）的所有commits。
+    如果使用‘git rebase -i start’ 意为合并‘start’（不包含start）的，到最近一次的所有commits。
+
+        提交该语句后，会进入到编辑命令行。
+
+        将最近一次commit之前所有的commits前的 ‘pick’修改为’s‘，意为’squash‘，使用提交，但合并到之前的提交中.保存退出后，将进入到第二次的vim编写中，将之前的提交信息，删除，编辑新的提交信息后，保存，退出。
+
+
+
+
+
+进行了push操作后的多个commits合并
+    
