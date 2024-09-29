@@ -1,0 +1,13 @@
+以 “redux-essentials-example” 文件中的例子为例：
+
+/src/app/store.js ： 创建Redux store 实例
+
+/src/featurea/counter/counterSlice.js ： counter特性相关的redux逻辑
+
+configureStore创建的“slice”是应用中所有单个功能的Redux reducer 逻辑和 action 的集合。
+
+只能在createSlice 和 createReducer 中编写 ’mutation‘逻辑， 因为他们在内部使用Immer库
+
+Immer库使用一种称为“Proxy”的特殊JS工具来包装提供的数据，当尝试改变数据的时候，Immer会跟踪尝试进行改变的所有更改，
+然后使用该更改列表返回一个安全的，不可变的更新值。（就相当于Immer库为你创建了一个原始值的副本，然后实际上修改的是副本中的内容）。
+
