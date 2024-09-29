@@ -1,0 +1,38 @@
+Middleware 中间件
+
+
+Middleware 在 dispatch action 的时候和 action 到达 reducer 那一刻之间提供了三方的逻辑拓展点。
+可以使用 Redux Middleware 进行日志记录、 故障监控上报、 与异步API通信、路由等。
+
+
+理解 Middleware
+    日志： 
+        Redux 的好处是它使状态的变更变得可预测且透明。每次 dispatch action 时，状态都会被重新计算并保存。状态不能自行改变，它只能是一个特定 action 改变的结果。
+
+        手动打日志：
+            1.原始方案在每次调用 store.dispatch(action) 时手动记录 action 和下一个状态
+                eg: console.log('dispatching:', action);                // 获取action 是指 action.type?
+                    store.dispatch(action);                             // 重新计算状态
+                    console.log('next store:', store.getState());        // 获取重新计算状态后的状态值
+
+            2.封装dispatch  
+                eg: function dispatchAndLog(store, action) {
+                        console.log('dispatching:', action);
+                        store.dispatch(action);
+                        console.log('next store:', store.getState());
+                    }
+
+                    dispatchAndLog(store, action);
+
+            3.给 dispatch 打补丁（Monkeypatch）
+                直接重写 store 实例上的 dispatch 函数。 store 本身是带有一些方法的普通对象。
+                eg: const next = store.dispatch
+                    store.dispatch = function dispatchAndLog(action) {
+                        console.log('dispatching:', action);
+                        let result = next(action);
+                        console.log('next state:', store.getState())
+                        return result;
+                    }
+                无论在何处 dispatch action，一定会被log 记录下来。猴子补丁从不是正确做法，但仙子可以允许其存在。
+                
+            
