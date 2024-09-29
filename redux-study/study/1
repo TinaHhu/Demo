@@ -11,3 +11,60 @@ configureStore创建的“slice”是应用中所有单个功能的Redux reducer
 Immer库使用一种称为“Proxy”的特殊JS工具来包装提供的数据，当尝试改变数据的时候，Immer会跟踪尝试进行改变的所有更改，
 然后使用该更改列表返回一个安全的，不可变的更新值。（就相当于Immer库为你创建了一个原始值的副本，然后实际上修改的是副本中的内容）。
 
+
+纯函数的定义：
+    一个函数的返回结果只依赖于传给他的参数，没有使用外部的全局变量等，并且在执行过程中没有副作用。
+    （即相同的输入只能返回相同的输出。）
+
+
+redux的三大原则:
+    1.单一数据源。
+        整个应用的全局 state 被储存在一颗 object tree 中，并且这个 object tree 只存在于唯一的一个store中。
+    2.state是只读的。
+        唯一改变 state 的方法就是触发 action， action 是一个用于描述已发生事件的普通对象。
+        （即： action只能表达出想要修改的意愿，而不能真的修改数据。）
+    3.使用纯函数来执行修改。
+        为了描述 action 是如何改变 state tree ，需要编写纯的 reducers。
+        他接收以前的 state 和 action，返回新的 state。 返回的是一个新对象，而没有对之前的对象进行修改。
+
+
+State
+    type state = any
+    表示一个redux应用的全部状态，通常为一个多层嵌套的对象。
+    顶层state可以是对象，可以是像map一样的键值对集合，可以是任何数据类型。但要尽量保证，state是可序列化的，这样好转换成JSON格式。
+
+
+Action
+    type action = object
+    action 是一个简单的对象，用来表示即将要改变 state 的倾向（不能真的修改数据）。 是将数据存入 store 的唯一途径。
+    action中必须要有一个字段type（最好是string类型，因为string类型可被序列化。）
+
+Reducer
+    type Reducer<S1,A> = (state:S1, action:A) => S2
+    (reducer 中的两个参数，一个是原state，一个是action。action携带的是‘改变 state 的倾向’。原则上reducer内不能有突变，这里能写突变，即改变S1，是因为内置了Immer库。)
+    reducer内部不能调用api接口请求。
+
+dispatch function
+    type BaseDispatch = (a: Action) => Action
+    type Dispatch = (a: Action| AsyncAction) => any
+
+    ? Base dispatch function 总是同步地将 action 与上一次从 store 返回的 state 传递给 reducer，然后计算出新的 state。它要求 action 是一个可以被 reducer 消费的普通对象。
+
+Middleware
+    type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
+    type Middleware = (api: Middleware) => (next: Dispatch) => Dispatch
+    Middleware 是一个高阶函数，用来组合dispatch function 并返回一个新的dispatch function，通常是将 ‘异步action’ 转换成 ‘action’。
+
+Store 
+    type Store = {
+        dispatch: Dispatch
+        getState: () => State
+        subscribe: (listener: () => void) => () => void
+         replaceReducer: (reducer: Reducer) => void
+    }
+    store就是存储这应用的state tree 的对象。因为他的构建发生于 reducer 层，所以一个 Redux 应用只有一个Store。
+
+    dispatch(action)： Base dispatch function。
+    getState() ：返回当前 Store 的 State。
+    subscribe(listener)：注册一个 state 发生变化时的回调。
+    replaceReducer(nextReducer)： 可用于热重载和代码分割。通常你不需要用到这个 API。
