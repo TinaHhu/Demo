@@ -1,0 +1,12 @@
+可以向 axios 传递相关配置来创建请求
+
+axios(config)
+
+    axios({
+        method: 'post',
+        url: '/user',
+        data: {
+            firstName: 'Fred',
+            lastName: 'Flintstone',
+        }
+    });

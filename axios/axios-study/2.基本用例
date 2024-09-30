@@ -1,0 +1,46 @@
+发起一个Get请求
+
+    eg1:给定向ID的用户发送请求
+        const axios = require('axios');
+        axios.get('/user?ID=123')
+            .then(function (response) {
+                // 这里是请求成功之后做的处理
+            })
+            .catch(function (error) {
+                // 这里是请求失败之后的处理
+            })
+            .finally(function () {
+                // 不管请求是否成功，都会执行该操作
+            })
+
+
+    eg2:把参数单独写出来
+        const axios = require('axios');
+        axios.get('/user', {
+            params: {
+                ID:123
+            }
+        })
+            .then(function (response) {
+                // 这里是请求成功之后做的处理
+            })
+            .catch(function (error) {
+                // 这里是请求失败之后的处理
+            })
+            .finally(function () {
+                // 不管请求是否成功，都会执行该操作
+            })
+
+    
+    eg3:使用async/await
+        async function getUser() {
+            try {
+                const response = await axios.get('/user?ID=123');
+                // 这里是请求成功之后做的处理
+            } catch (error) {
+                // 这里是请求失败之后的处理
+            }
+        }
+
+
+第三个例子，即使用 async/await 在一些IE和旧的浏览器中不适用，尽量选择前两个。

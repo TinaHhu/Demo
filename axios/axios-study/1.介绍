@@ -1,0 +1,7 @@
+axios介绍:
+    axios是一个基于promise网络请求库。
+
+
+安装:
+    npm install axios
+
