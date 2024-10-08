@@ -1,0 +1,10 @@
+特点：
+    1.用于适配互不兼容的系统（或模块）   // ?「后端服务service 和 前端ui」
+    2.能够提高开发速度
+    3.不涉及实际的业务逻辑
+
+
+UI Component <-> API
+
+
+UI Component <-> Glue Code <-> API

@@ -1,0 +1,11 @@
+sagas 被实现为 Generator 函数，它会向 redux-saga 中间件生成对象。生成的对象是一种由中间件解释的指令。
+（function* —— Generator函数）
+
+yield delay(1000) 和 yield call(delay, 1000) 的区别：
+    yield delay(1000)
+    在传递给下一位调用者（调用者可以是运行代码的中间件）之前，先进行了求值。也可以是运行 Generator函数 并遍历返回的 Generator函数。因此调用者接收到的是一个Promise。
+
+    yield call(delay, 1000)  ===> { CALL : {fn: delay, args: [1000] } }
+    call 和 put 一样会返回一个effect，指示中间件使用给定的参数调用给定的函数。 事实上，call， put 都不执行任何调度或者异步调用， 他们返回的是原JavaScript对象。
+
+    中间件会检查每一个产生的 effect 的类型，然后决定如何实现该effect。如果是put，会将操作发送到 store， 如果是 call 则会调用指定的函数（在该例子中是 delay函数， 1000就是指定的参数）。
