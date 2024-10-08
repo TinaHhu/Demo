@@ -1,0 +1,52 @@
+错误处理
+假设我们的 API 函数Api.fetch返回一个 Promise，当远程提取由于某种原因失败时，该 Promise 会被拒绝。
+向 store 发送动作来处理 saga 中的错误。
+
+1.try/catch
+    function* fetchProducts() {
+        try {
+            const products = yield call(Api.fetch, '/products')
+            yield put({type: 'PRODUCTS_RECEIVED', products})
+        } 
+        catch(error) {
+            yield put({ type: 'PRODUCTS_REQUEST_FAILED', error })
+        }
+    }
+
+
+
+    const iterator = fetchProducts()
+    assert.deepEqual(
+        iterator.next().value,
+        call(Api.fetch， '/products'),
+        'fetchProducts should yield an Effect call(Api.fetch, './products')'
+    )
+    // 创建一个虚假的错误
+    const error = {}
+    assert.deepEqual(
+        iterator.throw(error).value, // 这里向throw方法传递了一个虚假错误，导致 generator 中断当前流程并执行catch
+        put(Api.fetch, '/products'),
+        'fetchProducts should yield an Effect put({ type: 'PRODUCTS_REQUEST_FAILED', error })'
+    )
+
+
+2.让API服务返回带有错误标志的正常值。
+    例如，可以捕获 Promise 拒绝并将其映射到具有错误字段的对象。
+    function fetchProductsApi() {
+        return Api.fetch('/products')
+            .then(response => ({ response }))
+            .catch(error => ({ error }))
+    }
+
+    function* fetchProducts() {
+        const { response, error } = yield call(fetchProductsApi)
+        if (response)
+            yield put({ type: 'PRODUCTS_RECEIVED', products: response }) 
+        else
+            yield put({ type: 'PRODUCTS_REQUEST_FAILED', error })
+    }
+
+
+
+
+onError? 冒泡到父级？

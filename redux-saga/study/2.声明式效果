@@ -1,0 +1,43 @@
+声明式效果    
+    
+    
+    
+    在 redux-saga 中， saga 是 使用 generator 函数实现的。
+为了表达 saga 的逻辑，从generator 函数中生成纯 JavaScript 对象，并将生成的 JavaScript 对象称为 effects。
+effect 是一个包含了一些中间件要解释的信息的对象。 可以将 effect 视为 指示中间件执行某些操作的指令（例如调用某个异步函数，将操作分派到存储等）  『好像是 redux 中的 dispatch 一样』。
+
+redux-saga 中间件负责执行函数调用并使用已解析的响应恢复生成器。
+
+要创造 effect， 可以使用 redux-saga/effects 包中提供的函数。
+
+sagas 可以以多种形式产生 effects， 最简单的方式是产生 Promise。
+
+eg:
+
+    import { takeEvery } from 'redux-saga/effects'
+    import Api from './path/to/api'
+
+    function* watchFetchProducts() {
+        yield takeEvery('PRODUCTS_REQUESTED', fetchProducts)
+    }
+
+    function* fetchProducts() {
+        // Api.fetch('/products')触发 AJAX 请求并返回 Promise，该 Promise 将使用已解析的响应进行解析，AJAX 请求将立即执行。
+        // const products = yield Api.fetch('/products')  // 在 generator 函数中， 任何位于右侧的 yield表达式都会被求值，然后将结果返回给调用者（即后面的中间件）。
+        const products = yield call(Api.fetch, '/products') // 与上面的不同的是，我们不会立即执行 fetch 调用，而是 call 创建一个 effect 的描述。 使用 apply 替换 call 也可以
+        console.log(products)
+    }
+
+
+
+const products = yield Api.fetch('/products') 不好的原因：
+    返回为一个Promise， 在测试中，执行真实的服务即不可行也不实用。所以必须要用一个假的函数来替换真的函数，模拟 Api.fetch 函数。
+假函数实际上不会运行ajax请求，而只会检查 Api.fetch 函数是否使用了正确的参数调用。
+    模拟使得测试更困难且不可靠。
+
+
+测试不一定需要展示出最终的真实结果，只要保证产生正确的函数和参数即可。所以可以不用在 generator 函数内部调用异步函数，而是只生成函数调用的描述即可。
+
+
+？还有一个 cps ？
+
